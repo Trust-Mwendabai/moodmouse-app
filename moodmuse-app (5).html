@@ -1,0 +1,2158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoodMuse - Your Emotional Wellness Companion</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0e0e0e;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.8s ease;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .quote-text, .affirmation-text {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-weight: 400;
+        }
+
+        .gradient-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+            transition: background 1s ease;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0e0e0e 100%);
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+        }
+
+        header {
+            text-align: center;
+            padding: 2rem 1rem;
+            background: rgba(18, 18, 18, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            position: relative;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .theme-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .theme-btn.active {
+            border-color: #00ff88;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+        }
+
+        .theme-btn.charcoal {
+            background: linear-gradient(135deg, #1a1a1a, #0e0e0e);
+        }
+
+        .theme-btn.pure-black {
+            background: #000000;
+        }
+
+        .theme-btn.dim {
+            background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+        }
+
+        .theme-btn.light {
+            background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+        }
+
+        .theme-btn.soft-light {
+            background: linear-gradient(135deg, #fefefe, #f0f0f0);
+        }
+
+        .theme-btn.warm {
+            background: linear-gradient(135deg, #fff9f0, #ffe8d0);
+        }
+
+        .theme-btn.blue {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+        }
+
+        .theme-btn.mint {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        }
+
+        .theme-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            color: #666;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .theme-btn:hover .theme-label {
+            opacity: 1;
+        }
+
+        /* Light theme styles */
+        body.light-theme {
+            background: #f5f5f5;
+            color: #2a2a2a;
+        }
+
+        body.light-theme .gradient-overlay {
+            background: linear-gradient(135deg, #ffffff 0%, #e8e8e8 100%);
+            opacity: 0.7;
+        }
+
+        body.light-theme header {
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme h1 {
+            background: linear-gradient(135deg, #2a2a2a, #666);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        body.light-theme .tagline {
+            color: #666;
+        }
+
+        body.light-theme nav {
+            background: rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        body.light-theme nav button {
+            color: #666;
+        }
+
+        body.light-theme nav button:hover,
+        body.light-theme nav button.active {
+            color: #2a2a2a;
+        }
+
+        body.light-theme nav button.active::after {
+            background: linear-gradient(90deg, transparent, #2a2a2a, transparent);
+        }
+
+        body.light-theme .mood-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .mood-card:hover {
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        body.light-theme .mood-description {
+            color: #666;
+        }
+
+        body.light-theme .quote-box,
+        body.light-theme .exercise-box,
+        body.light-theme .affirmation-box {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .quote-author {
+            color: #666;
+        }
+
+        body.light-theme button.btn {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: #2a2a2a;
+        }
+
+        body.light-theme button.btn:hover {
+            background: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .playlist-link {
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: #2a2a2a;
+        }
+
+        body.light-theme .playlist-link:hover {
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        body.light-theme .content-section h2,
+        body.light-theme .content-section h3 {
+            color: #2a2a2a;
+        }
+
+        body.light-theme .content-section p,
+        body.light-theme .content-section ul,
+        body.light-theme .content-section li {
+            color: #555;
+        }
+
+        body.light-theme .settings-option,
+        body.light-theme .lesson-card,
+        body.light-theme .stat-card,
+        body.light-theme .journal-entry {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .lesson-card:hover {
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border-color: rgba(0, 0, 0, 0.2);
+        }
+
+        body.light-theme .lesson-number {
+            color: rgba(0, 0, 0, 0.05);
+        }
+
+        body.light-theme .lesson-description,
+        body.light-theme .journal-text {
+            color: #666;
+        }
+
+        body.light-theme .journal-date {
+            color: #999;
+        }
+
+        body.light-theme .journal-mood {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        body.light-theme textarea {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            color: #2a2a2a;
+        }
+
+        body.light-theme textarea:focus {
+            border-color: rgba(0, 0, 0, 0.4);
+        }
+
+        body.light-theme .stat-label {
+            color: #666;
+        }
+
+        body.light-theme .breathing-circle {
+            border-color: rgba(0, 0, 0, 0.2);
+        }
+
+        body.light-theme footer {
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            color: #999;
+        }
+
+        body.light-theme .particle {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .affirmation-text {
+            color: #2a2a2a;
+        }
+
+        @media (max-width: 768px) {
+            .theme-toggle {
+                position: relative;
+                top: auto;
+                right: auto;
+                transform: none;
+                justify-content: center;
+                margin-top: 1rem;
+            }
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #fff, #999);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            font-size: 1.05rem;
+            color: #888;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            padding: 1rem;
+            background: rgba(18, 18, 18, 0.6);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            flex-wrap: wrap;
+        }
+
+        nav button {
+            background: transparent;
+            border: none;
+            color: #999;
+            font-size: 0.9rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav button:hover {
+            color: #fff;
+        }
+
+        nav button.active {
+            color: #fff;
+        }
+
+        nav button.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #fff, transparent);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .mood-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .mood-card {
+            background: rgba(30, 30, 30, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mood-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1), transparent);
+            transform: translate(-50%, -50%);
+            transition: all 0.6s ease;
+        }
+
+        .mood-card:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .mood-card:hover {
+            transform: translateY(-10px);
+            border-color: currentColor;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .mood-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            filter: grayscale(0.3);
+            transition: all 0.3s ease;
+        }
+
+        .mood-card:hover .mood-icon {
+            filter: grayscale(0);
+            transform: scale(1.1);
+        }
+
+        .mood-name {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+        }
+
+        .mood-description {
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .mood-display {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .quote-box {
+            background: rgba(30, 30, 30, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .quote-text {
+            font-size: 1.8rem;
+            font-weight: 300;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .quote-author {
+            font-size: 1rem;
+            color: #999;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        button.btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        button.btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .playlist-section {
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .playlist-section h3 {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+        }
+
+        .playlist-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .playlist-link {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .playlist-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .content-section {
+            max-width: 800px;
+            margin: 2rem auto;
+            line-height: 1.8;
+        }
+
+        .content-section h2 {
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+
+        .content-section h3 {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #ddd;
+        }
+
+        .content-section p {
+            margin-bottom: 1.5rem;
+            color: #aaa;
+        }
+
+        .content-section ul {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+            color: #aaa;
+        }
+
+        .content-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .settings-option {
+            background: rgba(30, 30, 30, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .settings-option h3 {
+            font-size: 1.3rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        .lesson-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .lesson-card {
+            background: rgba(30, 30, 30, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .lesson-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.1);
+            margin-bottom: 0.5rem;
+        }
+
+        .lesson-title {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        .lesson-description {
+            color: #999;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .exercise-box {
+            background: rgba(30, 30, 30, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .breathing-circle {
+            width: 200px;
+            height: 200px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            margin: 2rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 4s ease;
+        }
+
+        .breathing-circle.inhale {
+            transform: scale(1.3);
+            border-color: rgba(95, 189, 186, 0.8);
+        }
+
+        .breathing-circle.exhale {
+            transform: scale(0.7);
+            border-color: rgba(107, 155, 209, 0.8);
+        }
+
+        .timer-display {
+            font-size: 3rem;
+            font-weight: 300;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .journal-entry {
+            background: rgba(30, 30, 30, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .journal-date {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .journal-mood {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .journal-text {
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            background: rgba(30, 30, 30, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 1rem;
+            color: #fff;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(30, 30, 30, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff88, #00cc6a);
+            transition: width 0.5s ease;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .affirmation-box {
+            background: rgba(30, 30, 30, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 700px;
+            text-align: center;
+        }
+
+        .affirmation-text {
+            font-size: 1.5rem;
+            font-weight: 300;
+            line-height: 1.8;
+            color: #ddd;
+        }
+
+        /* Mood-specific colors */
+        body.happy { color: #ffd700; }
+        body.happy .gradient-overlay { background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #0e0e0e 100%); }
+
+        body.sad { color: #6b9bd1; }
+        body.sad .gradient-overlay { background: linear-gradient(135deg, #4b6cb7 0%, #182848 50%, #0e0e0e 100%); }
+
+        body.calm { color: #5fbdba; }
+        body.calm .gradient-overlay { background: linear-gradient(135deg, #5fbdba 0%, #3d7e7c 50%, #0e0e0e 100%); }
+
+        body.angry { color: #d64545; }
+        body.angry .gradient-overlay { background: linear-gradient(135deg, #d64545 0%, #8b1e1e 50%, #0e0e0e 100%); }
+
+        body.motivated { color: #00ff88; }
+        body.motivated .gradient-overlay { background: linear-gradient(135deg, #00ff88 0%, #00cc6a 50%, #0e0e0e 100%); }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .mood-grid { grid-template-columns: 1fr; }
+            .quote-text { font-size: 1.3rem; }
+            .button-group { flex-direction: column; }
+            nav { gap: 0.5rem; }
+            nav button { font-size: 0.85rem; padding: 0.4rem 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="gradient-overlay"></div>
+    <div class="particles" id="particles"></div>
+    
+    <header>
+        <h1>MoodMuse</h1>
+        <p class="tagline">Your Emotional Wellness Companion</p>
+        <div class="theme-toggle">
+            <button class="theme-btn charcoal active" onclick="setThemeVariant('charcoal')" title="Charcoal Dark">
+                <span class="theme-label">Charcoal</span>
+            </button>
+            <button class="theme-btn pure-black" onclick="setThemeVariant('pure')" title="Pure Black">
+                <span class="theme-label">Pure Black</span>
+            </button>
+            <button class="theme-btn dim" onclick="setThemeVariant('dim')" title="Dim Gray">
+                <span class="theme-label">Dim</span>
+            </button>
+            <button class="theme-btn light" onclick="setThemeVariant('light')" title="Light Theme">
+                <span class="theme-label">Light</span>
+            </button>
+        </div>
+    </header>
+
+    <nav>
+        <button onclick="showPage('home')" class="active">Home</button>
+        <button onclick="showPage('journal')">Journal</button>
+        <button onclick="showPage('lessons')">Lessons</button>
+        <button onclick="showPage('exercises')">Exercises</button>
+        <button onclick="showPage('tracker')">Mood Tracker</button>
+        <button onclick="showPage('about')">About</button>
+        <button onclick="showPage('settings')">Settings</button>
+    </nav>
+
+    <div class="container">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <div class="mood-grid">
+                <div class="mood-card" onclick="selectMood('happy')" style="color: #ffd700;">
+                    <div class="mood-icon">😊</div>
+                    <div class="mood-name">Happy</div>
+                    <div class="mood-description">Bright and joyful vibes</div>
+                </div>
+
+                <div class="mood-card" onclick="selectMood('sad')" style="color: #6b9bd1;">
+                    <div class="mood-icon">😢</div>
+                    <div class="mood-name">Sad</div>
+                    <div class="mood-description">Reflective and melancholic</div>
+                </div>
+
+                <div class="mood-card" onclick="selectMood('calm')" style="color: #5fbdba;">
+                    <div class="mood-icon">😌</div>
+                    <div class="mood-name">Calm</div>
+                    <div class="mood-description">Peaceful and serene</div>
+                </div>
+
+                <div class="mood-card" onclick="selectMood('angry')" style="color: #d64545;">
+                    <div class="mood-icon">😤</div>
+                    <div class="mood-name">Angry</div>
+                    <div class="mood-description">Intense and powerful</div>
+                </div>
+
+                <div class="mood-card" onclick="selectMood('motivated')" style="color: #00ff88;">
+                    <div class="mood-icon">😎</div>
+                    <div class="mood-name">Motivated</div>
+                    <div class="mood-description">Energetic and driven</div>
+                </div>
+
+                <div class="mood-card" onclick="selectMood('anxious')" style="color: #9d7bd8;">
+                    <div class="mood-icon">😰</div>
+                    <div class="mood-name">Anxious</div>
+                    <div class="mood-description">Worried and restless</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mood Display Page -->
+        <div id="mood-display" class="page">
+            <div class="mood-display">
+                <div class="quote-box">
+                    <div class="quote-text" id="quote-text"></div>
+                    <div class="quote-author" id="quote-author"></div>
+                </div>
+
+                <div class="affirmation-box">
+                    <h3 style="margin-bottom: 1rem;">Daily Affirmation</h3>
+                    <div class="affirmation-text" id="affirmation-text"></div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn" onclick="nextQuote()">Next Quote</button>
+                    <button class="btn" onclick="nextAffirmation()">New Affirmation</button>
+                    <button class="btn" onclick="showPage('home')">Change Mood</button>
+                </div>
+
+                <div class="playlist-section">
+                    <h3>Recommended Playlists</h3>
+                    <div class="playlist-links" id="playlist-links"></div>
+                </div>
+
+                <div class="playlist-section">
+                    <h3>Suggested Activities</h3>
+                    <div class="playlist-links" id="activity-links"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Journal Page -->
+        <div id="journal" class="page">
+            <div class="content-section">
+                <h2>Emotional Journal</h2>
+                <p>Express your thoughts and feelings. Journaling helps process emotions and track your mental wellness journey.</p>
+
+                <div class="exercise-box">
+                    <h3>New Entry</h3>
+                    <div class="button-group" style="justify-content: flex-start; margin-bottom: 1rem;">
+                        <button class="btn" onclick="setJournalMood('happy')">😊 Happy</button>
+                        <button class="btn" onclick="setJournalMood('sad')">😢 Sad</button>
+                        <button class="btn" onclick="setJournalMood('calm')">😌 Calm</button>
+                        <button class="btn" onclick="setJournalMood('angry')">😤 Angry</button>
+                        <button class="btn" onclick="setJournalMood('motivated')">😎 Motivated</button>
+                        <button class="btn" onclick="setJournalMood('anxious')">😰 Anxious</button>
+                    </div>
+                    <textarea id="journal-input" placeholder="How are you feeling today? What's on your mind?"></textarea>
+                    <div class="button-group" style="justify-content: flex-start; margin-top: 1rem;">
+                        <button class="btn" onclick="saveJournalEntry()">Save Entry</button>
+                    </div>
+                </div>
+
+                <h3>Past Entries</h3>
+                <div id="journal-entries"></div>
+            </div>
+        </div>
+
+        <!-- Lessons Page -->
+        <div id="lessons" class="page">
+            <div class="content-section">
+                <h2>Emotional Wellness Lessons</h2>
+                <p>Learn practical strategies for managing emotions and improving mental well-being.</p>
+
+                <div class="lesson-grid">
+                    <div class="lesson-card" onclick="showLesson(1)">
+                        <div class="lesson-number">01</div>
+                        <div class="lesson-title">Understanding Your Emotions</div>
+                        <div class="lesson-description">Learn to identify and name your emotions accurately. Understanding is the first step to managing feelings effectively.</div>
+                    </div>
+
+                    <div class="lesson-card" onclick="showLesson(2)">
+                        <div class="lesson-number">02</div>
+                        <div class="lesson-title">The Power of Mindfulness</div>
+                        <div class="lesson-description">Discover how being present can reduce anxiety and increase emotional awareness in daily life.</div>
+                    </div>
+
+                    <div class="lesson-card" onclick="showLesson(3)">
+                        <div class="lesson-number">03</div>
+                        <div class="lesson-title">Cognitive Reframing</div>
+                        <div class="lesson-description">Learn to challenge negative thoughts and replace them with more balanced perspectives.</div>
+                    </div>
+
+                    <div class="lesson-card" onclick="showLesson(4)">
+                        <div class="lesson-number">04</div>
+                        <div class="lesson-title">Building Emotional Resilience</div>
+                        <div class="lesson-description">Develop the ability to bounce back from difficult emotions and challenging situations.</div>
+                    </div>
+
+                    <div class="lesson-card" onclick="showLesson(5)">
+                        <div class="lesson-number">05</div>
+                        <div class="lesson-title">Healthy Emotional Expression</div>
+                        <div class="lesson-description">Find constructive ways to express feelings without causing harm to yourself or others.</div>
+                    </div>
+
+                    <div class="lesson-card" onclick="showLesson(6)">
+                        <div class="lesson-number">06</div>
+                        <div class="lesson-title">Self-Compassion Practice</div>
+                        <div class="lesson-description">Learn to treat yourself with the same kindness you would offer a good friend.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lesson Detail Page -->
+        <div id="lesson-detail" class="page">
+            <div class="content-section">
+                <button class="btn" onclick="showPage('lessons')" style="margin-bottom: 2rem;">← Back to Lessons</button>
+                <div id="lesson-content"></div>
+            </div>
+        </div>
+
+        <!-- Exercises Page -->
+        <div id="exercises" class="page">
+            <div class="content-section">
+                <h2>Wellness Exercises</h2>
+                <p>Practice these exercises to manage stress, calm your mind, and boost emotional well-being.</p>
+
+                <div class="exercise-box">
+                    <h3>4-7-8 Breathing Exercise</h3>
+                    <p>This breathing technique helps calm the nervous system and reduce anxiety.</p>
+                    <div class="breathing-circle" id="breathing-circle">
+                        <span id="breath-text">Ready</span>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn" onclick="startBreathing()">Start Exercise</button>
+                        <button class="btn" onclick="stopBreathing()">Stop</button>
+                    </div>
+                </div>
+
+                <div class="exercise-box">
+                    <h3>5-Minute Meditation Timer</h3>
+                    <p>Set aside time for quiet reflection and mindfulness.</p>
+                    <div class="timer-display" id="timer-display">5:00</div>
+                    <div class="button-group">
+                        <button class="btn" onclick="startTimer(300)">5 Minutes</button>
+                        <button class="btn" onclick="startTimer(600)">10 Minutes</button>
+                        <button class="btn" onclick="startTimer(900)">15 Minutes</button>
+                        <button class="btn" onclick="stopTimer()">Stop</button>
+                    </div>
+                </div>
+
+                <div class="exercise-box">
+                    <h3>Gratitude Practice</h3>
+                    <p>List three things you're grateful for today. Practicing gratitude shifts focus to positive aspects of life.</p>
+                    <textarea id="gratitude-input" placeholder="1. I'm grateful for...&#10;2. I appreciate...&#10;3. I'm thankful for..."></textarea>
+                    <div class="button-group" style="justify-content: flex-start; margin-top: 1rem;">
+                        <button class="btn" onclick="saveGratitude()">Save Gratitude</button>
+                    </div>
+                </div>
+
+                <div class="exercise-box">
+                    <h3>Progressive Muscle Relaxation</h3>
+                    <p>Tense and relax different muscle groups to release physical tension:</p>
+                    <ul>
+                        <li>Start with your toes - curl them tightly for 5 seconds, then release</li>
+                        <li>Move to your calves - tense for 5 seconds, release</li>
+                        <li>Continue up through thighs, abdomen, hands, arms, shoulders, and face</li>
+                        <li>Notice the difference between tension and relaxation</li>
+                        <li>Breathe deeply throughout the exercise</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mood Tracker Page -->
+        <div id="tracker" class="page">
+            <div class="content-section">
+                <h2>Mood Tracker</h2>
+                <p>Track your emotional patterns over time to gain insights into your mental wellness.</p>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-entries">0</div>
+                        <div class="stat-label">Total Entries</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="current-streak">0</div>
+                        <div class="stat-label">Day Streak</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="most-common-mood">—</div>
+                        <div class="stat-label">Most Common Mood</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="wellness-score">0%</div>
+                        <div class="stat-label">Wellness Score</div>
+                    </div>
+                </div>
+
+                <div class="exercise-box">
+                    <h3>Weekly Mood Overview</h3>
+                    <div id="mood-chart"></div>
+                </div>
+
+                <div class="exercise-box">
+                    <h3>Quick Log</h3>
+                    <p>How are you feeling right now?</p>
+                    <div class="button-group">
+                        <button class="btn" onclick="quickLogMood('happy')">😊</button>
+                        <button class="btn" onclick="quickLogMood('sad')">😢</button>
+                        <button class="btn" onclick="quickLogMood('calm')">😌</button>
+                        <button class="btn" onclick="quickLogMood('angry')">😤</button>
+                        <button class="btn" onclick="quickLogMood('motivated')">😎</button>
+                        <button class="btn" onclick="quickLogMood('anxious')">😰</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Page -->
+        <div id="about" class="page">
+            <div class="content-section">
+                <h2>About MoodMuse</h2>
+                <p>MoodMuse is your personal emotional wellness companion, designed to help you understand, manage, and improve your emotional well-being through a beautiful, calming dark-themed interface.</p>
+                
+                <h3>Our Mission</h3>
+                <p>We believe that emotional wellness deserves the same attention as physical health. MoodMuse provides a safe, private space for self-reflection, learning, and growth. Our tools are designed to help you develop emotional intelligence and build lasting mental wellness habits.</p>
+                
+                <h3>Features</h3>
+                <ul>
+                    <li><strong>Mood-Based Experience:</strong> Select your current emotion and receive personalized quotes, music, and activities</li>
+                    <li><strong>Emotional Journal:</strong> Track your feelings and thoughts in a private, reflective space</li>
+                    <li><strong>Wellness Lessons:</strong> Learn evidence-based strategies for emotional management</li>
+                    <li><strong>Guided Exercises:</strong> Practice breathing techniques, meditation, and gratitude</li>
+                    <li><strong>Mood Tracking:</strong> Visualize emotional patterns and monitor your wellness journey</li>
+                    <li><strong>Dark Theme Design:</strong> Reduce eye strain and create a calming visual experience</li>
+                </ul>
+                
+                <h3>Technologies Used</h3>
+                <p>MoodMuse is built entirely with front-end web technologies:</p>
+                <ul>
+                    <li>HTML5 for semantic structure and accessibility</li>
+                    <li>CSS3 for beautiful dark-themed styling, animations, and responsive design</li>
+                    <li>JavaScript for interactive features and dynamic content</li>
+                    <li>In-memory data storage for privacy-focused functionality</li>
+                </ul>
+
+                <h3>Privacy & Data</h3>
+                <p>Your privacy matters. All your journal entries, mood logs, and preferences are stored locally in your browser. No data is sent to external servers. Your emotional journey is yours alone.</p>
+
+                <h3>Disclaimer</h3>
+                <p>MoodMuse is a wellness tool designed to support emotional awareness and self-care. It is not a substitute for professional mental health treatment. If you're experiencing severe distress, please reach out to a mental health professional or crisis helpline.</p>
+            </div>
+        </div>
+
+        <!-- Settings Page -->
+        <div id="settings" class="page">
+            <div class="content-section">
+                <h2>Settings</h2>
+                
+                <div class="settings-option">
+                    <h3>Theme Variant</h3>
+                    <p>Customize your visual experience with different themes. Choose what's most comfortable for your eyes.</p>
+                    <div class="button-group">
+                        <button class="btn" onclick="setThemeVariant('charcoal')">🌑 Charcoal Dark</button>
+                        <button class="btn" onclick="setThemeVariant('pure')">⚫ Pure Black</button>
+                        <button class="btn" onclick="setThemeVariant('dim')">🌫️ Dim Gray</button>
+                        <button class="btn" onclick="setThemeVariant('light')">☀️ Light Theme</button>
+                    </div>
+                    <p style="margin-top: 1rem; color: #999; font-size: 0.9rem;">💡 Tip: You can also use the theme buttons in the header!</p>
+                </div>
+
+                <div class="settings-option">
+                    <h3>Particle Effects</h3>
+                    <p>Toggle floating particles for added ambiance.</p>
+                    <div class="button-group">
+                        <button class="btn" onclick="toggleParticles()">Toggle Particles</button>
+                    </div>
+                </div>
+
+                <div class="settings-option">
+                    <h3>Notifications</h3>
+                    <p>Set daily reminders for wellness practices.</p>
+                    <div class="button-group">
+                        <button class="btn" onclick="alert('Reminder: Practice gratitude journaling!')">Enable Reminders</button>
+                    </div>
+                </div>
+
+                <div class="settings-option">
+                    <h3>Data Management</h3>
+                    <p>Export your data or start fresh by clearing all stored information.</p>
+                    <div class="button-group">
+                        <button class="btn" onclick="exportData()">Export Data</button>
+                        <button class="btn" onclick="clearData()">Clear All Data</button>
+                    </div>
+                </div>
+
+                <div class="settings-option">
+                    <h3>Wellness Goals</h3>
+                    <p>Track your progress toward emotional wellness goals.</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="goal-progress" style="width: 45%"></div>
+                    </div>
+                    <p style="margin-top: 1rem; color: #999;">Goal: Journal 7 days in a row (4/7 complete)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>MoodMuse © 2025 | Created with ❤️ for emotional well-being</p>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem;">Remember: You are not alone. Your feelings are valid. You deserve peace.</p>
+    </footer>
+
+    <script>
+        // Enhanced quotes database
+        const quotes = {
+            happy: [
+                { text: "Happiness is not by chance, but by choice.", author: "Jim Rohn" },
+                { text: "The sun himself is weak when he first rises, and gathers strength and courage as the day gets on.", author: "Charles Dickens" },
+                { text: "Joy is what happens when we allow ourselves to recognize how good things really are.", author: "Marianne Williamson" },
+                { text: "Happiness is the secret to all beauty. There is no beauty without happiness.", author: "Christian Dior" },
+                { text: "The most wasted of days is one without laughter.", author: "E.E. Cummings" },
+                { text: "Happiness depends upon ourselves.", author: "Aristotle" },
+                { text: "Choose to be optimistic, it feels better.", author: "Dalai Lama" }
+            ],
+            sad: [
+                { text: "Every storm runs out of rain.", author: "Maya Angelou" },
+                { text: "The darker the night, the brighter the stars.", author: "Fyodor Dostoevsky" },
+                { text: "Tears are words that need to be written.", author: "Paulo Coelho" },
+                { text: "Sometimes you need to be alone to reflect on life.", author: "Unknown" },
+                { text: "The cure for anything is salt water: sweat, tears, or the sea.", author: "Isak Dinesen" },
+                { text: "This too shall pass.", author: "Persian Proverb" },
+                { text: "Even the darkest night will end and the sun will rise.", author: "Victor Hugo" }
+            ],
+            calm: [
+                { text: "Peace comes from within. Do not seek it without.", author: "Buddha" },
+                { text: "In the midst of movement and chaos, keep stillness inside of you.", author: "Deepak Chopra" },
+                { text: "Calmness is the cradle of power.", author: "Josiah Gilbert Holland" },
+                { text: "The greatest weapon against stress is our ability to choose one thought over another.", author: "William James" },
+                { text: "Within you, there is a stillness and a sanctuary to which you can retreat at any time.", author: "Hermann Hesse" },
+                { text: "Quiet the mind and the soul will speak.", author: "Ma Jaya Sati Bhagavati" },
+                { text: "Be still and know.", author: "Psalm 46:10" }
+            ],
+            angry: [
+                { text: "For every minute you are angry, you lose sixty seconds of happiness.", author: "Ralph Waldo Emerson" },
+                { text: "Anger is an acid that can do more harm to the vessel in which it is stored than to anything on which it is poured.", author: "Mark Twain" },
+                { text: "Speak when you are angry and you will make the best speech you will ever regret.", author: "Ambrose Bierce" },
+                { text: "The best fighter is never angry.", author: "Lao Tzu" },
+                { text: "Holding onto anger is like drinking poison and expecting the other person to die.", author: "Buddha" },
+                { text: "When angry, count to ten before you speak. If very angry, count to one hundred.", author: "Thomas Jefferson" },
+                { text: "Your anger is a gift you give yourself. Choose to unwrap it or set it aside.", author: "Unknown" }
+            ],
+            motivated: [
+                { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+                { text: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson" },
+                { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
+                { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
+                { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
+                { text: "Your limitation—it's only your imagination.", author: "Unknown" },
+                { text: "The harder you work for something, the greater you'll feel when you achieve it.", author: "Unknown" }
+            ],
+            anxious: [
+                { text: "You don't have to control your thoughts. You just have to stop letting them control you.", author: "Dan Millman" },
+                { text: "Anxiety does not empty tomorrow of its sorrows, but only empties today of its strength.", author: "Charles Spurgeon" },
+                { text: "Nothing can bring you peace but yourself.", author: "Ralph Waldo Emerson" },
+                { text: "You are braver than you believe, stronger than you seem, and smarter than you think.", author: "A.A. Milne" },
+                { text: "Worrying is like a rocking chair: it gives you something to do but never gets you anywhere.", author: "Erma Bombeck" },
+                { text: "The present moment is the only time over which we have dominion.", author: "Thich Nhat Hanh" },
+                { text: "Breathe. You are enough. You have enough. You do enough.", author: "Unknown" }
+            ]
+        };
+
+        // Affirmations database
+        const affirmations = {
+            happy: [
+                "I radiate joy and positive energy.",
+                "I am grateful for the abundance in my life.",
+                "My happiness inspires and uplifts others.",
+                "I choose to see the beauty in every moment.",
+                "I deserve all the good things happening to me."
+            ],
+            sad: [
+                "It's okay to feel sad. My emotions are valid.",
+                "I am gentle and patient with myself.",
+                "This feeling is temporary, and I will heal.",
+                "I allow myself to process these emotions fully.",
+                "I am worthy of comfort and compassion."
+            ],
+            calm: [
+                "I am at peace with who I am.",
+                "I trust the process of life.",
+                "I release all tension and embrace tranquility.",
+                "My mind is clear and my heart is open.",
+                "I am grounded, centered, and balanced."
+            ],
+            angry: [
+                "I acknowledge my anger without letting it control me.",
+                "I can transform this energy into positive action.",
+                "I choose peace over conflict.",
+                "My emotions are messengers, not enemies.",
+                "I release what I cannot control."
+            ],
+            motivated: [
+                "I am capable of achieving anything I set my mind to.",
+                "Every step forward is progress, no matter how small.",
+                "I embrace challenges as opportunities for growth.",
+                "My potential is limitless.",
+                "I am focused, determined, and unstoppable."
+            ],
+            anxious: [
+                "I am safe in this moment.",
+                "I can handle whatever comes my way.",
+                "I breathe in calm and exhale worry.",
+                "I trust in my ability to navigate uncertainty.",
+                "This anxiety will pass, and I will be okay."
+            ]
+        };
+
+        // Activities database
+        const activities = {
+            happy: ["Dance to your favorite music", "Call a friend and share your joy", "Create art or craft something", "Go for a walk in nature"],
+            sad: ["Watch a comforting movie", "Take a warm bath", "Write in your journal", "Listen to soothing music"],
+            calm: ["Practice yoga or stretching", "Read a good book", "Enjoy a cup of tea", "Spend time in nature"],
+            angry: ["Go for a run or intense workout", "Punch a pillow", "Write an angry letter (don't send it)", "Practice deep breathing"],
+            motivated: ["Start that project you've been planning", "Set new goals", "Learn something new", "Organize your space"],
+            anxious: ["Practice 4-7-8 breathing", "Do a body scan meditation", "List your worries and examine them", "Ground yourself with 5-4-3-2-1 technique"]
+        };
+
+        // Playlists
+        const playlists = {
+            happy: [
+                { name: "Happy Hits", url: "https://open.spotify.com/playlist/37i9dQZF1DXdPec7aLTmlC" },
+                { name: "Feel Good Music", url: "https://www.youtube.com/watch?v=ZbZSe6N_BXs" },
+                { name: "Upbeat Pop", url: "https://open.spotify.com/playlist/37i9dQZF1DX0UrRvztWcAU" }
+            ],
+            sad: [
+                { name: "Sad Songs", url: "https://open.spotify.com/playlist/37i9dQZF1DX7qK8ma5wgG1" },
+                { name: "Melancholic Vibes", url: "https://www.youtube.com/watch?v=4fezP875xOQ" },
+                { name: "Emotional Ballads", url: "https://open.spotify.com/playlist/37i9dQZF1DX64Y3du11rR1" }
+            ],
+            calm: [
+                { name: "Peaceful Piano", url: "https://open.spotify.com/playlist/37i9dQZF1DX4sWSpwq3LiO" },
+                { name: "Calm Meditation", url: "https://www.youtube.com/watch?v=lFcSrYw-ARY" },
+                { name: "Ambient Relaxation", url: "https://open.spotify.com/playlist/37i9dQZF1DWZd79rJ6a7lp" }
+            ],
+            angry: [
+                { name: "Rage Release", url: "https://open.spotify.com/playlist/37i9dQZF1DX1tyCD9QhIWF" },
+                { name: "Heavy Energy", url: "https://www.youtube.com/watch?v=04F4xlWSFh0" },
+                { name: "Rock Anthems", url: "https://open.spotify.com/playlist/37i9dQZF1DWWJOmJ7nRx0C" }
+            ],
+            motivated: [
+                { name: "Workout Power", url: "https://open.spotify.com/playlist/37i9dQZF1DX76Wlfdnj7AP" },
+                { name: "Motivational Beats", url: "https://www.youtube.com/watch?v=g_tea8ZNk5A" },
+                { name: "Beast Mode", url: "https://open.spotify.com/playlist/37i9dQZF1DX70RN3TfWWJh" }
+            ],
+            anxious: [
+                { name: "Stress Relief", url: "https://open.spotify.com/playlist/37i9dQZF1DWUoqEG4WY6ce" },
+                { name: "Calming Sounds", url: "https://www.youtube.com/watch?v=lTRiuFIWV54" },
+                { name: "Anxiety Ease", url: "https://open.spotify.com/playlist/37i9dQZF1DX1s9knjP51Oa" }
+            ]
+        };
+
+        // Lessons content
+        const lessons = {
+            1: {
+                title: "Understanding Your Emotions",
+                content: `
+                    <h2>Understanding Your Emotions</h2>
+                    <p>Emotions are complex responses to our experiences, involving physical sensations, thoughts, and behaviors. Learning to understand them is the foundation of emotional wellness.</p>
+                    
+                    <h3>The Emotion Wheel</h3>
+                    <p>Psychologist Robert Plutchik identified eight primary emotions: joy, sadness, fear, anger, surprise, disgust, trust, and anticipation. All other emotions are combinations or variations of these core feelings.</p>
+                    
+                    <h3>Why Naming Emotions Matters</h3>
+                    <ul>
+                        <li><strong>Reduces intensity:</strong> When you can name what you're feeling, the emotion often becomes less overwhelming</li>
+                        <li><strong>Increases awareness:</strong> You become more in tune with your internal experience</li>
+                        <li><strong>Improves communication:</strong> You can better express your needs to others</li>
+                        <li><strong>Enables management:</strong> You can't manage what you don't understand</li>
+                    </ul>
+                    
+                    <h3>Practice: The RULER Method</h3>
+                    <p>Developed by the Yale Center for Emotional Intelligence:</p>
+                    <ul>
+                        <li><strong>R</strong>ecognize emotions in yourself and others</li>
+                        <li><strong>U</strong>nderstand the causes and consequences</li>
+                        <li><strong>L</strong>abel emotions accurately with a nuanced vocabulary</li>
+                        <li><strong>E</strong>xpress emotions appropriately</li>
+                        <li><strong>R</strong>egulate emotions with helpful strategies</li>
+                    </ul>
+                    
+                    <h3>Exercise</h3>
+                    <p>Next time you feel something strongly, pause and ask yourself:</p>
+                    <ul>
+                        <li>What exactly am I feeling? (Try to be specific: not just "bad" but "disappointed" or "frustrated")</li>
+                        <li>Where do I feel this in my body?</li>
+                        <li>What triggered this feeling?</li>
+                        <li>What is this emotion trying to tell me?</li>
+                    </ul>
+                `
+            },
+            2: {
+                title: "The Power of Mindfulness",
+                content: `
+                    <h2>The Power of Mindfulness</h2>
+                    <p>Mindfulness is the practice of being fully present and engaged in the current moment, without judgment. It's one of the most powerful tools for emotional regulation.</p>
+                    
+                    <h3>What Mindfulness Is NOT</h3>
+                    <ul>
+                        <li>Emptying your mind of all thoughts</li>
+                        <li>Always feeling calm or blissed out</li>
+                        <li>Avoiding difficult emotions</li>
+                        <li>A religious practice (though it can complement any faith)</li>
+                    </ul>
+                    
+                    <h3>What Mindfulness IS</h3>
+                    <ul>
+                        <li>Noticing what's happening right now</li>
+                        <li>Observing your thoughts and feelings without getting caught up in them</li>
+                        <li>Accepting your experience as it is</li>
+                        <li>Bringing your attention back when it wanders (which it will!)</li>
+                    </ul>
+                    
+                    <h3>Benefits of Regular Mindfulness Practice</h3>
+                    <ul>
+                        <li>Reduced anxiety and stress</li>
+                        <li>Better emotional regulation</li>
+                        <li>Improved focus and concentration</li>
+                        <li>Enhanced self-awareness</li>
+                        <li>Greater resilience to difficult emotions</li>
+                        <li>Better sleep quality</li>
+                    </ul>
+                    
+                    <h3>Simple Mindfulness Practices</h3>
+                    <p><strong>1. Mindful Breathing:</strong> Spend 5 minutes focusing only on your breath. Notice the sensation of air entering and leaving your body.</p>
+                    <p><strong>2. Body Scan:</strong> Mentally scan your body from head to toe, noticing any sensations without trying to change them.</p>
+                    <p><strong>3. Mindful Eating:</strong> Eat one meal slowly, noticing colors, textures, flavors, and sensations.</p>
+                    <p><strong>4. Walking Meditation:</strong> Walk slowly, paying attention to each step and the feeling of your feet on the ground.</p>
+                    
+                    <h3>Getting Started</h3>
+                    <p>Start with just 2-3 minutes per day. Consistency matters more than duration. Use the breathing exercise in the Exercises section to begin your practice.</p>
+                `
+            },
+            3: {
+                title: "Cognitive Reframing",
+                content: `
+                    <h2>Cognitive Reframing</h2>
+                    <p>Cognitive reframing is the practice of identifying and challenging unhelpful thought patterns, then replacing them with more balanced, realistic perspectives. It's a cornerstone of cognitive behavioral therapy (CBT).</p>
+                    
+                    <h3>Common Thinking Traps</h3>
+                    <ul>
+                        <li><strong>All-or-Nothing Thinking:</strong> "If I'm not perfect, I'm a total failure"</li>
+                        <li><strong>Catastrophizing:</strong> "This small mistake will ruin everything"</li>
+                        <li><strong>Mind Reading:</strong> "They definitely think I'm stupid"</li>
+                        <li><strong>Emotional Reasoning:</strong> "I feel anxious, so something must be wrong"</li>
+                        <li><strong>Should Statements:</strong> "I should be better at this by now"</li>
+                        <li><strong>Overgeneralization:</strong> "This always happens to me"</li>
+                    </ul>
+                    
+                    <h3>The Reframing Process</h3>
+                    <p><strong>Step 1: Identify the thought</strong></p>
+                    <p>What exactly are you telling yourself? Write it down.</p>
+                    
+                    <p><strong>Step 2: Examine the evidence</strong></p>
+                    <p>What facts support this thought? What facts contradict it?</p>
+                    
+                    <p><strong>Step 3: Consider alternatives</strong></p>
+                    <p>What's another way to look at this situation? What would you tell a friend?</p>
+                    
+                    <p><strong>Step 4: Create a balanced thought</strong></p>
+                    <p>Develop a more realistic, helpful perspective that acknowledges both positives and negatives.</p>
+                    
+                    <h3>Examples</h3>
+                    <p><strong>Original thought:</strong> "I'm terrible at presentations. Everyone could see how nervous I was."</p>
+                    <p><strong>Reframed thought:</strong> "I felt nervous, but I completed the presentation and shared valuable information. Most people probably didn't notice my anxiety as much as I did."</p>
+                    
+                    <p><strong>Original thought:</strong> "I'll never find a job I actually enjoy."</p>
+                    <p><strong>Reframed thought:</strong> "Finding the right job takes time. Each application is a step forward, and my interests may evolve as I explore options."</p>
+                    
+                    <h3>Practice Exercise</h3>
+                    <p>For the next week, keep a thought record. When you notice a strong negative emotion:</p>
+                    <ul>
+                        <li>Write down the situation</li>
+                        <li>Record your automatic thought</li>
+                        <li>Note the emotion and its intensity (0-10)</li>
+                        <li>Challenge the thought using the steps above</li>
+                        <li>Create a balanced alternative</li>
+                        <li>Rate your emotion intensity again</li>
+                    </ul>
+                `
+            },
+            4: {
+                title: "Building Emotional Resilience",
+                content: `
+                    <h2>Building Emotional Resilience</h2>
+                    <p>Resilience is the ability to adapt to adversity, bounce back from setbacks, and grow stronger through challenges. It's not about avoiding difficult emotions, but learning to move through them effectively.</p>
+                    
+                    <h3>The Resilience Equation</h3>
+                    <p>Resilience = Resources > Demands</p>
+                    <p>You build resilience by either increasing your resources or managing demands more effectively (or both).</p>
+                    
+                    <h3>Key Components of Resilience</h3>
+                    
+                    <p><strong>1. Self-Awareness</strong></p>
+                    <ul>
+                        <li>Understanding your emotions, strengths, and limitations</li>
+                        <li>Recognizing your stress signals early</li>
+                        <li>Knowing what helps you feel better</li>
+                    </ul>
+                    
+                    <p><strong>2. Self-Regulation</strong></p>
+                    <ul>
+                        <li>Managing intense emotions without being overwhelmed</li>
+                        <li>Using healthy coping strategies</li>
+                        <li>Maintaining routines during difficult times</li>
+                    </ul>
+                    
+                    <p><strong>3. Mental Agility</strong></p>
+                    <ul>
+                        <li>Seeing situations from multiple perspectives</li>
+                        <li>Finding opportunities in setbacks</li>
+                        <li>Adapting your approach when needed</li>
+                    </ul>
+                    
+                    <p><strong>4. Strength of Character</strong></p>
+                    <ul>
+                        <li>Living according to your values</li>
+                        <li>Acting with integrity even when it's hard</li>
+                        <li>Maintaining hope and optimism</li>
+                    </ul>
+                    
+                    <p><strong>5. Connection</strong></p>
+                    <ul>
+                        <li>Building and maintaining supportive relationships</li>
+                        <li>Asking for help when needed</li>
+                        <li>Contributing to your community</li>
+                    </ul>
+                    
+                    <h3>Resilience-Building Practices</h3>
+                    
+                    <p><strong>Daily Habits:</strong></p>
+                    <ul>
+                        <li>Maintain regular sleep, exercise, and nutrition routines</li>
+                        <li>Practice gratitude (write down 3 things daily)</li>
+                        <li>Engage in activities that bring you joy</li>
+                        <li>Limit exposure to negative news and social media</li>
+                    </ul>
+                    
+                    <p><strong>During Challenges:</strong></p>
+                    <ul>
+                        <li>Break problems into manageable steps</li>
+                        <li>Focus on what you can control</li>
+                        <li>Seek support from trusted people</li>
+                        <li>Remember past challenges you've overcome</li>
+                        <li>Maintain perspective (ask: "Will this matter in 5 years?")</li>
+                    </ul>
+                    
+                    <h3>The Growth Mindset</h3>
+                    <p>Resilient people view challenges as opportunities to learn rather than threats to avoid. They ask:</p>
+                    <ul>
+                        <li>"What can I learn from this?"</li>
+                        <li>"How can I grow stronger?"</li>
+                        <li>"What small step can I take today?"</li>
+                    </ul>
+                `
+            },
+            5: {
+                title: "Healthy Emotional Expression",
+                content: `
+                    <h2>Healthy Emotional Expression</h2>
+                    <p>All emotions deserve to be felt and expressed, but how we express them matters. Healthy emotional expression allows us to process feelings without causing harm to ourselves or others.</p>
+                    
+                    <h3>Why Expression Matters</h3>
+                    <p>Suppressing emotions doesn't make them disappear—it often makes them stronger and can lead to:</p>
+                    <ul>
+                        <li>Physical symptoms (headaches, stomach issues, tension)</li>
+                        <li>Relationship problems</li>
+                        <li>Increased anxiety and depression</li>
+                        <li>Explosive outbursts when emotions finally surface</li>
+                        <li>Difficulty identifying and managing feelings</li>
+                    </ul>
+                    
+                    <h3>Healthy vs. Unhealthy Expression</h3>
+                    
+                    <p><strong>Unhealthy Expression:</strong></p>
+                    <ul>
+                        <li>Yelling or verbal attacks</li>
+                        <li>Physical aggression or violence</li>
+                        <li>Passive-aggressive behavior</li>
+                        <li>Self-harm or substance abuse</li>
+                        <li>Constant complaining without seeking solutions</li>
+                        <li>Dumping emotions on others without consideration</li>
+                    </ul>
+                    
+                    <p><strong>Healthy Expression:</strong></p>
+                    <ul>
+                        <li>Talking about feelings calmly and directly</li>
+                        <li>Writing in a journal</li>
+                        <li>Creative expression (art, music, dance)</li>
+                        <li>Physical release (exercise, crying)</li>
+                        <li>Seeking professional help</li>
+                        <li>Using "I" statements to communicate needs</li>
+                    </ul>
+                    
+                    <h3>The DEAR MAN Technique</h3>
+                    <p>A structured approach for expressing emotions and needs effectively:</p>
+                    <ul>
+                        <li><strong>D</strong>escribe: State the facts objectively</li>
+                        <li><strong>E</strong>xpress: Share your feelings using "I" statements</li>
+                        <li><strong>A</strong>ssert: Clearly ask for what you need</li>
+                        <li><strong>R</strong>einforce: Explain the positive outcomes</li>
+                        <li><strong>M</strong>indful: Stay focused on your goal</li>
+                        <li><strong>A</strong>ppear confident: Use a calm, steady tone</li>
+                        <li><strong>N</strong>egotiate: Be willing to compromise</li>
+                    </ul>
+                    
+                    <h3>Expression Methods by Emotion</h3>
+                    
+                    <p><strong>Anger:</strong></p>
+                    <ul>
+                        <li>Take a timeout before responding</li>
+                        <li>Engage in vigorous exercise</li>
+                        <li>Write an angry letter (don't send it)</li>
+                        <li>Express needs assertively, not aggressively</li>
+                    </ul>
+                    
+                    <p><strong>Sadness:</strong></p>
+                    <ul>
+                        <li>Allow yourself to cry</li>
+                        <li>Talk to a trusted friend</li>
+                        <li>Journal your thoughts</li>
+                        <li>Create art or music</li>
+                    </ul>
+                    
+                    <p><strong>Anxiety:</strong></p>
+                    <ul>
+                        <li>Name your specific worries</li>
+                        <li>Share concerns with someone supportive</li>
+                        <li>Practice grounding techniques</li>
+                        <li>Channel nervous energy into movement</li>
+                    </ul>
+                    
+                    <p><strong>Joy:</strong></p>
+                    <ul>
+                        <li>Share your happiness with others</li>
+                        <li>Express gratitude</li>
+                        <li>Celebrate accomplishments</li>
+                        <li>Savor positive moments fully</li>
+                    </ul>
+                    
+                    <h3>Creating Your Expression Toolkit</h3>
+                    <p>Build a personal list of healthy expression methods that work for you. Include activities for different moods and situations. Keep this list handy for when emotions feel overwhelming.</p>
+                `
+            },
+            6: {
+                title: "Self-Compassion Practice",
+                content: `
+                    <h2>Self-Compassion Practice</h2>
+                    <p>Self-compassion means treating yourself with the same kindness, concern, and understanding you'd offer to a good friend. Research shows it's a powerful predictor of emotional well-being.</p>
+                    
+                    <h3>The Three Elements of Self-Compassion</h3>
+                    
+                    <p><strong>1. Self-Kindness vs. Self-Judgment</strong></p>
+                    <p>Instead of harshly criticizing yourself for inadequacies, be warm and understanding. Recognize that imperfection is part of being human.</p>
+                    
+                    <p><strong>2. Common Humanity vs. Isolation</strong></p>
+                    <p>Remember that suffering and personal failure are part of the shared human experience. You're not alone in your struggles.</p>
+                    
+                    <p><strong>3. Mindfulness vs. Over-Identification</strong></p>
+                    <p>Observe negative thoughts and emotions with openness rather than suppressing them or exaggerating them.</p>
+                    
+                    <h3>Why Self-Compassion Isn't Selfish</h3>
+                    <p>Common misconceptions about self-compassion:</p>
+                    <ul>
+                        <li><strong>Myth:</strong> "It's self-indulgent or weak"<br><strong>Reality:</strong> It builds emotional strength and resilience</li>
+                        <li><strong>Myth:</strong> "I need to be hard on myself to stay motivated"<br><strong>Reality:</strong> Self-criticism undermines motivation; compassion enhances it</li>
+                        <li><strong>Myth:</strong> "I don't deserve compassion until I'm perfect"<br><strong>Reality:</strong> Everyone deserves compassion, especially during struggles</li>
+                    </ul>
+                    
+                    <h3>The Self-Compassion Break</h3>
+                    <p>Use this three-step practice when you're struggling:</p>
+                    
+                    <p><strong>Step 1: Acknowledge the Moment</strong></p>
+                    <p>"This is really hard right now" or "I'm struggling"</p>
+                    
+                    <p><strong>Step 2: Remember Common Humanity</strong></p>
+                    <p>"Everyone struggles sometimes" or "I'm not alone in this"</p>
+                    
+                    <p><strong>Step 3: Offer Kindness</strong></p>
+                    <p>"May I be kind to myself" or "May I give myself what I need"</p>
+                    
+                    <h3>Self-Compassion Practices</h3>
+                    
+                    <p><strong>Supportive Touch:</strong></p>
+                    <p>Place your hand over your heart or give yourself a gentle hug. Physical gestures of warmth activate the care system in your brain.</p>
+                    
+                    <p><strong>Compassionate Letter:</strong></p>
+                    <p>Write yourself a letter from the perspective of a compassionate friend. What would they say about your situation?</p>
+                    
+                    <p><strong>Change Your Self-Talk:</strong></p>
+                    <p>Notice harsh inner dialogue. Ask: "Would I say this to a friend?" If not, rephrase it more kindly.</p>
+                    
+                    <p><strong>Self-Compassion Affirmations:</strong></p>
+                    <ul>
+                        <li>"I am doing my best with the resources I have"</li>
+                        <li>"It's okay to make mistakes—that's how I learn"</li>
+                        <li>"I deserve care and understanding"</li>
+                        <li>"My worth isn't determined by my achievements"</li>
+                        <li>"I can be both imperfect and worthy of love"</li>
+                    </ul>
+                    
+                    <h3>Building a Self-Compassion Practice</h3>
+                    <p>Start small:</p>
+                    <ul>
+                        <li>Set reminders to check in with yourself kindly</li>
+                        <li>Use the self-compassion break daily</li>
+                        <li>Notice and challenge self-critical thoughts</li>
+                        <li>Treat yourself as you would a beloved friend</li>
+                        <li>Celebrate small wins and acknowledge efforts</li>
+                    </ul>
+                    
+                    <p><strong>Remember:</strong> Self-compassion is a practice, not a destination. Be patient with yourself as you develop this skill.</p>
+                `
+            }
+        };
+
+        // State management
+        let currentMood = null;
+        let currentQuoteIndex = 0;
+        let currentAffirmationIndex = 0;
+        let breathingInterval = null;
+        let timerInterval = null;
+        let selectedJournalMood = 'calm';
+        let particlesEnabled = true;
+        
+        let savedData = {
+            lastMood: null,
+            themeVariant: 'default',
+            journalEntries: [],
+            moodLogs: [],
+            gratitudeEntries: [],
+            currentStreak: 0,
+            totalEntries: 0
+        };
+
+        // Initialize
+        window.onload = function() {
+            createParticles();
+            loadSavedData();
+            updateStats();
+            displayJournalEntries();
+            
+            // Apply saved theme
+            if (savedData.themeVariant) {
+                setThemeVariant(savedData.themeVariant);
+            }
+            
+            if (savedData.lastMood) {
+                selectMood(savedData.lastMood);
+            }
+        };
+
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        function loadSavedData() {
+            if (window.moodMuseData) {
+                savedData = { ...savedData, ...window.moodMuseData };
+            }
+        }
+
+        function saveData() {
+            window.moodMuseData = savedData;
+        }
+
+        function showPage(pageName) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            const navButtons = document.querySelectorAll('nav button');
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(pageName).classList.add('active');
+            event.target.classList.add('active');
+            
+            if (pageName === 'tracker') {
+                updateStats();
+            }
+        }
+
+        function selectMood(mood) {
+            currentMood = mood;
+            currentQuoteIndex = 0;
+            currentAffirmationIndex = 0;
+            savedData.lastMood = mood;
+            saveData();
+            
+            document.body.className = mood;
+            displayQuote();
+            displayAffirmation();
+            displayPlaylists();
+            displayActivities();
+            document.getElementById('mood-display').classList.add('active');
+            document.getElementById('home').classList.remove('active');
+        }
+
+        function displayQuote() {
+            const moodQuotes = quotes[currentMood];
+            const quote = moodQuotes[currentQuoteIndex];
+            
+            document.getElementById('quote-text').textContent = `"${quote.text}"`;
+            document.getElementById('quote-author').textContent = `— ${quote.author}`;
+        }
+
+        function displayAffirmation() {
+            const moodAffirmations = affirmations[currentMood];
+            const affirmation = moodAffirmations[currentAffirmationIndex];
+            
+            document.getElementById('affirmation-text').textContent = affirmation;
+        }
+
+        function nextQuote() {
+            const moodQuotes = quotes[currentMood];
+            currentQuoteIndex = (currentQuoteIndex + 1) % moodQuotes.length;
+            displayQuote();
+        }
+
+        function nextAffirmation() {
+            const moodAffirmations = affirmations[currentMood];
+            currentAffirmationIndex = (currentAffirmationIndex + 1) % moodAffirmations.length;
+            displayAffirmation();
+        }
+
+        function displayPlaylists() {
+            const moodPlaylists = playlists[currentMood];
+            const container = document.getElementById('playlist-links');
+            container.innerHTML = '';
+            
+            moodPlaylists.forEach(playlist => {
+                const link = document.createElement('a');
+                link.href = playlist.url;
+                link.target = '_blank';
+                link.className = 'playlist-link';
+                link.textContent = playlist.name;
+                container.appendChild(link);
+            });
+        }
+
+        function displayActivities() {
+            const moodActivities = activities[currentMood];
+            const container = document.getElementById('activity-links');
+            container.innerHTML = '';
+            
+            moodActivities.forEach(activity => {
+                const div = document.createElement('div');
+                div.className = 'playlist-link';
+                div.textContent = activity;
+                div.style.cursor = 'default';
+                container.appendChild(div);
+            });
+        }
+
+        function setJournalMood(mood) {
+            selectedJournalMood = mood;
+        }
+
+        function saveJournalEntry() {
+            const text = document.getElementById('journal-input').value.trim();
+            if (!text) {
+                alert('Please write something first!');
+                return;
+            }
+            
+            const entry = {
+                date: new Date().toLocaleString(),
+                mood: selectedJournalMood,
+                text: text
+            };
+            
+            savedData.journalEntries.unshift(entry);
+            savedData.totalEntries++;
+            saveData();
+            
+            document.getElementById('journal-input').value = '';
+            displayJournalEntries();
+            updateStats();
+            alert('Journal entry saved!');
+        }
+
+        function displayJournalEntries() {
+            const container = document.getElementById('journal-entries');
+            container.innerHTML = '';
+            
+            if (savedData.journalEntries.length === 0) {
+                container.innerHTML = '<p style="color: #666; text-align: center; padding: 2rem;">No journal entries yet. Start writing!</p>';
+                return;
+            }
+            
+            savedData.journalEntries.slice(0, 10).forEach(entry => {
+                const entryDiv = document.createElement('div');
+                entryDiv.className = 'journal-entry';
+                entryDiv.innerHTML = `
+                    <div class="journal-date">${entry.date}</div>
+                    <div class="journal-mood">Mood: ${entry.mood}</div>
+                    <div class="journal-text">${entry.text}</div>
+                `;
+                container.appendChild(entryDiv);
+            });
+        }
+
+        function quickLogMood(mood) {
+            const log = {
+                date: new Date().toISOString(),
+                mood: mood
+            };
+            
+            savedData.moodLogs.push(log);
+            saveData();
+            updateStats();
+            alert(`Mood logged: ${mood}`);
+        }
+
+        function updateStats() {
+            document.getElementById('total-entries').textContent = savedData.totalEntries;
+            document.getElementById('current-streak').textContent = calculateStreak();
+            document.getElementById('most-common-mood').textContent = getMostCommonMood();
+            document.getElementById('wellness-score').textContent = calculateWellnessScore() + '%';
+            
+            const progress = (calculateStreak() / 7) * 100;
+            document.getElementById('goal-progress').style.width = Math.min(progress, 100) + '%';
+        }
+
+        function calculateStreak() {
+            if (savedData.moodLogs.length === 0) return 0;
+            
+            let streak = 1;
+            const today = new Date().toDateString();
+            const logs = savedData.moodLogs.map(log => new Date(log.date).toDateString());
+            
+            for (let i = logs.length - 1; i > 0; i--) {
+                if (logs[i] !== logs[i-1]) {
+                    const date1 = new Date(logs[i]);
+                    const date2 = new Date(logs[i-1]);
+                    const diffDays = Math.floor((date1 - date2) / (1000 * 60 * 60 * 24));
+                    
+                    if (diffDays === 1) {
+                        streak++;
+                    } else {
+                        break;
+                    }
+                }
+            }
+            
+            return streak;
+        }
+
+        function getMostCommonMood() {
+            if (savedData.moodLogs.length === 0) return '—';
+            
+            const moodCount = {};
+            savedData.moodLogs.forEach(log => {
+                moodCount[log.mood] = (moodCount[log.mood] || 0) + 1;
+            });
+            
+            let maxCount = 0;
+            let mostCommon = '—';
+            
+            for (const mood in moodCount) {
+                if (moodCount[mood] > maxCount) {
+                    maxCount = moodCount[mood];
+                    mostCommon = mood;
+                }
+            }
+            
+            return mostCommon;
+        }
+
+        function calculateWellnessScore() {
+            const entriesScore = Math.min(savedData.totalEntries * 5, 40);
+            const streakScore = Math.min(calculateStreak() * 10, 40);
+            const logScore = Math.min(savedData.moodLogs.length * 2, 20);
+            
+            return entriesScore + streakScore + logScore;
+        }
+
+        function saveGratitude() {
+            const text = document.getElementById('gratitude-input').value.trim();
+            if (!text) {
+                alert('Please write your gratitude list first!');
+                return;
+            }
+            
+            savedData.gratitudeEntries.push({
+                date: new Date().toLocaleString(),
+                text: text
+            });
+            saveData();
+            
+            document.getElementById('gratitude-input').value = '';
+            alert('Gratitude saved! 🙏');
+        }
+
+        function startBreathing() {
+            stopBreathing();
+            const circle = document.getElementById('breathing-circle');
+            const text = document.getElementById('breath-text');
+            let phase = 0;
+            
+            const phases = [
+                { text: 'Breathe In', class: 'inhale', duration: 4000 },
+                { text: 'Hold', class: 'inhale', duration: 7000 },
+                { text: 'Breathe Out', class: 'exhale', duration: 8000 }
+            ];
+            
+            function cycle() {
+                const current = phases[phase];
+                text.textContent = current.text;
+                circle.className = 'breathing-circle ' + current.class;
+                
+                phase = (phase + 1) % phases.length;
+            }
+            
+            cycle();
+            breathingInterval = setInterval(cycle, 4000 + 7000 + 8000);
+        }
+
+        function stopBreathing() {
+            if (breathingInterval) {
+                clearInterval(breathingInterval);
+                breathingInterval = null;
+            }
+            const circle = document.getElementById('breathing-circle');
+            const text = document.getElementById('breath-text');
+            circle.className = 'breathing-circle';
+            text.textContent = 'Ready';
+        }
+
+        function startTimer(seconds) {
+            stopTimer();
+            let remaining = seconds;
+            
+            function updateDisplay() {
+                const mins = Math.floor(remaining / 60);
+                const secs = remaining % 60;
+                document.getElementById('timer-display').textContent = 
+                    `${mins}:${secs.toString().padStart(2, '0')}`;
+                
+                if (remaining <= 0) {
+                    stopTimer();
+                    alert('Meditation complete! 🧘');
+                    return;
+                }
+                
+                remaining--;
+            }
+            
+            updateDisplay();
+            timerInterval = setInterval(updateDisplay, 1000);
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        function showLesson(lessonNum) {
+            const lesson = lessons[lessonNum];
+            document.getElementById('lesson-content').innerHTML = lesson.content;
+            document.getElementById('lesson-detail').classList.add('active');
+            document.getElementById('lessons').classList.remove('active');
+        }
+
+        function setThemeVariant(variant) {
+            savedData.themeVariant = variant;
+            saveData();
+            
+            // Remove all theme classes
+            document.body.classList.remove('light-theme');
+            
+            // Remove active class from all theme buttons
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            if (variant === 'pure') {
+                document.body.style.background = '#000000';
+                document.querySelector('.theme-btn.pure-black').classList.add('active');
+            } else if (variant === 'dim') {
+                document.body.style.background = '#1a1a1a';
+                document.querySelector('.theme-btn.dim').classList.add('active');
+            } else if (variant === 'light') {
+                document.body.style.background = '#f5f5f5';
+                document.body.classList.add('light-theme');
+                document.querySelector('.theme-btn.light').classList.add('active');
+            } else {
+                document.body.style.background = '#0e0e0e';
+                document.querySelector('.theme-btn.charcoal').classList.add('active');
+            }
+        }
+
+        function toggleParticles() {
+            particlesEnabled = !particlesEnabled;
+            const container = document.getElementById('particles');
+            container.style.display = particlesEnabled ? 'block' : 'none';
+            alert(particlesEnabled ? 'Particles enabled' : 'Particles disabled');
+        }
+
+        function exportData() {
+            const dataStr = JSON.stringify(savedData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'moodmuse-data.json';
+            link.click();
+            URL.revokeObjectURL(url);
+            alert('Data exported successfully!');
+        }
+
+        function clearData() {
+            if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
+                savedData = {
+                    lastMood: null,
+                    themeVariant: 'default',
+                    journalEntries: [],
+                    moodLogs: [],
+                    gratitudeEntries: [],
+                    currentStreak: 0,
+                    totalEntries: 0
+                };
+                window.moodMuseData = null;
+                document.body.className = '';
+                updateStats();
+                displayJournalEntries();
+                alert('All data cleared successfully!');
+            }
+        }
+    </script>
+</body>
+</html>
